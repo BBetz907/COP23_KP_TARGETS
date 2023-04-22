@@ -1,3 +1,5 @@
+rm(targets, tasts, tastsXim, tasts_neg, tasts_index, tasts_sd, tast_targets_pre)
+gc()
 
 # dplyr::all_equal(mer, tast_targets)	
 janitor::compare_df_cols(mer, tast_targets)	
@@ -36,9 +38,10 @@ targets_and_msd <- mer %>%
          #                   "TBClinic" = "TB Clinic"),
          day = today(tzone = "UTC")) %>% select(-ind_vl) %>%
   left_join(datapack, by = c("country_name")) %>% 
-  relocate(age_coarse, .after = datapack) %>%
+  relocate(age_coarse, current_quarter, day, .after = datapack) %>%
   glimpse()
 
+glimpse(targets_and_msd)
 
 # targets_and_msd <- targets_and_msd[ , order(names(targets_and_msd))] %>% arrange(country_name)  #order names
 
@@ -47,11 +50,12 @@ targets_and_msd %>% group_by(country_name, source_name) %>% summarise() %>% filt
 
 
 
-rm(mer, targets, tasts, tasts_im, tast_targets, tasts_neg, tasts_index, tasts_sd, tasts_sd_merge)
+
 gc()
 write_csv(targets_and_msd, "Data Out/targets_and_msd.csv", na = "")
-rm(targets_and_msd)
 gc()
 
+rm(targets_and_msd, mer, tast_targets)
+gc()
 
 
